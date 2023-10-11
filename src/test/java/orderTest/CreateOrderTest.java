@@ -20,7 +20,6 @@ public class CreateOrderTest {
     private UserRandom userRandom;
     private ValidatableResponse response;
     private IngredientList ingredientList;
-    String ingredients = IngredientList.allListIngredients();
 
     @Before
     @Step("Создание тестовых данных юзера")
@@ -36,7 +35,7 @@ public class CreateOrderTest {
     @Description("Проверяем, что заказ можно создать")
     public void createOrderWithoutAuthorization() {
 
-        ValidatableResponse createOrderWithoutAuthorization = orderSteps.createOrderWithoutAuthorization(ingredients);
+        ValidatableResponse createOrderWithoutAuthorization = orderSteps.createOrderWithoutAuthorization();
         orderResult.createOrderOK(createOrderWithoutAuthorization);
     }
 
@@ -47,7 +46,7 @@ public class CreateOrderTest {
         String accessToken = userRandom.getUserAccessToken();
         response = userSteps.deletedUser(StringUtils.substringAfter(accessToken, ""));
 
-        ValidatableResponse createOrderWithAuthorization = orderSteps.createOrderWithAuthorization(accessToken, ingredients);
+        ValidatableResponse createOrderWithAuthorization = orderSteps.createOrderWithAuthorization(accessToken);
         orderResult.createOrderOK(createOrderWithAuthorization);
     }
 
@@ -63,7 +62,7 @@ public class CreateOrderTest {
     @DisplayName("Создание заказа без авторизации и с неверным хэшом ингредиента")
     @Description("Проверяем, что заказ нельзя создать, вернётся ошибка 500")
     public void createOrderInvalidHashIngredients() {
-        ValidatableResponse createOrderInvalidHashIngredients = orderSteps.createOrderWithoutAuthorization("11111111111");
+        ValidatableResponse createOrderInvalidHashIngredients = orderSteps.createOrderWithoutAuthorizationInvalidHash();
         orderResult.createOrderInvalidHashIngredients(createOrderInvalidHashIngredients);
     }
 }

@@ -7,7 +7,6 @@ import io.restassured.response.ValidatableResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
-import site.nomoreparties.stellarburgers.ingredient.IngredientList;
 import site.nomoreparties.stellarburgers.order.OrderResult;
 import site.nomoreparties.stellarburgers.order.OrderSteps;
 import site.nomoreparties.stellarburgers.user.UserRandom;
@@ -21,7 +20,6 @@ public class ReceiptOrderTest {
     private UserSteps userSteps;
     private UserRandom userRandom;
     private ValidatableResponse response;
-    String ingredients = IngredientList.allListIngredients();
 
     @Before
     @Step("Создание тестовых данных юзера")
@@ -45,7 +43,7 @@ public class ReceiptOrderTest {
     @Description("Проверяем, что авторизированный пользователь может получить заказ")
     public void receiptOrderWithAuthorization() {
         String accessToken = userRandom.getUserAccessToken();
-        ValidatableResponse orderNumber = orderSteps.createOrderWithAuthorization(accessToken, ingredients);
+        ValidatableResponse orderNumber = orderSteps.createOrderWithAuthorization(accessToken);
         int orderNumberExpected = orderNumber.extract().path("order.number");
         ValidatableResponse receiptOrderWithAuthorization = orderSteps.receiptOrderWithAuthorization(accessToken);
         int orderNumberActual = receiptOrderWithAuthorization.extract().path("orders[0].number");

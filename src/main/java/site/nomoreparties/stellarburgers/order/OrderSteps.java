@@ -3,14 +3,29 @@ package site.nomoreparties.stellarburgers.order;
 import io.qameta.allure.Step;
 import io.restassured.response.ValidatableResponse;
 import site.nomoreparties.stellarburgers.config.RequestSpec;
+import site.nomoreparties.stellarburgers.ingredient.IngredientList;
+
+import java.util.Map;
+
 import static site.nomoreparties.stellarburgers.constantApi.ApiEndpoints.*;
 
 public class OrderSteps extends RequestSpec {
+private IngredientList ingredientList;
+
 
     @Step("Создание заказа без авторизации /api/orders")
-    public ValidatableResponse createOrderWithoutAuthorization(String ingredients) {
+    public ValidatableResponse createOrderWithoutAuthorization() {
         return requestSpec()
-                .body("{\"ingredients\" : [\"" + ingredients + "\"]}")
+                .body(Map.of("ingredients", ingredientList.ingredients()))
+                .when()
+                .post(ORDER_CREATE_POST)
+                .then();
+    }
+
+    @Step("Создание заказа без авторизации /api/orders")
+    public ValidatableResponse createOrderWithoutAuthorizationInvalidHash() {
+        return requestSpec()
+                .body(Map.of("ingredients", "11111111111111"))
                 .when()
                 .post(ORDER_CREATE_POST)
                 .then();
@@ -19,17 +34,17 @@ public class OrderSteps extends RequestSpec {
     @Step("Создание заказа без ингредиентов /api/orders")
     public ValidatableResponse createOrderWithoutIngredients() {
         return requestSpec()
-                .body("{\"ingredients\" : []}")
+                .body(Map.of("ingredients", ""))
                 .when()
                 .post(ORDER_CREATE_POST)
                 .then();
     }
 
     @Step("Создание заказа c авторизацией /api/orders")
-    public ValidatableResponse createOrderWithAuthorization(String accessToken, String hashIngredient) {
+    public ValidatableResponse createOrderWithAuthorization(String accessToken) {
         return requestSpec()
                 .header("Authorization", accessToken)
-                .body("{\"ingredients\" : [\"" + hashIngredient + "\"]}")
+                .body(Map.of("ingredients", ingredientList.ingredients()))
                 .when()
                 .post(ORDER_CREATE_POST)
                 .then();

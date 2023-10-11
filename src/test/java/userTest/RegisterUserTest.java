@@ -12,8 +12,6 @@ import site.nomoreparties.stellarburgers.user.UserRandom;
 import site.nomoreparties.stellarburgers.user.UserResult;
 import site.nomoreparties.stellarburgers.user.UserSteps;
 
-import java.util.Locale;
-
 public class RegisterUserTest {
     private UserSteps userSteps;
     private UserResult userResult;
