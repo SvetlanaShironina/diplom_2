@@ -10,16 +10,16 @@ import org.junit.Test;
 import site.nomoreparties.stellarburgers.ingredient.IngredientList;
 import site.nomoreparties.stellarburgers.order.OrderResult;
 import site.nomoreparties.stellarburgers.order.OrderSteps;
-import site.nomoreparties.stellarburgers.user.CreateUserModel;
+import site.nomoreparties.stellarburgers.user.UserRandom;
 import site.nomoreparties.stellarburgers.user.UserSteps;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 public class ReceiptOrderTest {
     private OrderSteps orderSteps;
     private OrderResult orderResult;
     private UserSteps userSteps;
+    private UserRandom userRandom;
     private ValidatableResponse response;
     String ingredients = IngredientList.allListIngredients();
 
@@ -29,6 +29,7 @@ public class ReceiptOrderTest {
         orderSteps = new OrderSteps();
         userSteps = new UserSteps();
         orderResult = new OrderResult();
+
     }
 
     @Test
@@ -43,7 +44,7 @@ public class ReceiptOrderTest {
     @DisplayName("Проверяем получение заказа c авторизацией")
     @Description("Проверяем, что авторизированный пользователь может получить заказ")
     public void receiptOrderWithAuthorization() {
-        String accessToken = CreateUserModel.userRandom();
+        String accessToken = userRandom.getUserAccessToken();
         ValidatableResponse orderNumber = orderSteps.createOrderWithAuthorization(accessToken, ingredients);
         int orderNumberExpected = orderNumber.extract().path("order.number");
         ValidatableResponse receiptOrderWithAuthorization = orderSteps.receiptOrderWithAuthorization(accessToken);

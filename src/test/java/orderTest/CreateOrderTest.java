@@ -10,13 +10,14 @@ import org.junit.Test;
 import site.nomoreparties.stellarburgers.ingredient.IngredientList;
 import site.nomoreparties.stellarburgers.order.OrderResult;
 import site.nomoreparties.stellarburgers.order.OrderSteps;
-import site.nomoreparties.stellarburgers.user.CreateUserModel;
+import site.nomoreparties.stellarburgers.user.UserRandom;
 import site.nomoreparties.stellarburgers.user.UserSteps;
 
 public class CreateOrderTest {
     private OrderSteps orderSteps;
     private OrderResult orderResult;
     private UserSteps userSteps;
+    private UserRandom userRandom;
     private ValidatableResponse response;
     private IngredientList ingredientList;
     String ingredients = IngredientList.allListIngredients();
@@ -27,6 +28,7 @@ public class CreateOrderTest {
     orderSteps = new OrderSteps();
     userSteps = new UserSteps();
     orderResult = new OrderResult();
+    userRandom = new UserRandom();
     }
 
     @Test
@@ -42,7 +44,7 @@ public class CreateOrderTest {
     @DisplayName("Создание заказа c авторизацией и с ингредиентами")
     @Description("Проверяем, что заказ можно создать")
     public void createOrderWithAuthorization() {
-        String accessToken = CreateUserModel.userRandom();
+        String accessToken = userRandom.getUserAccessToken();
         response = userSteps.deletedUser(StringUtils.substringAfter(accessToken, ""));
 
         ValidatableResponse createOrderWithAuthorization = orderSteps.createOrderWithAuthorization(accessToken, ingredients);

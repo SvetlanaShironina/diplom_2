@@ -1,8 +1,5 @@
 package userTest;
 
-import com.github.javafaker.Faker;
-import com.github.javafaker.service.FakeValuesService;
-import com.github.javafaker.service.RandomService;
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
@@ -11,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import site.nomoreparties.stellarburgers.user.CreateUserModel;
+import site.nomoreparties.stellarburgers.user.UserRandom;
 import site.nomoreparties.stellarburgers.user.UserResult;
 import site.nomoreparties.stellarburgers.user.UserSteps;
 
@@ -21,24 +19,13 @@ public class RegisterUserTest {
     private UserResult userResult;
     private ValidatableResponse response;
     private CreateUserModel createUserModel;
-    private String emailRandom;
-    private String passwordRandom;
-    private String nameRandom;
 
     @Before
     @Step("Создание тестовых данных юзера")
     public void setUp() {
         userSteps = new UserSteps();
         userResult = new UserResult();
-        createUserModel = new CreateUserModel(emailRandom, passwordRandom, nameRandom);
-
-        FakeValuesService fakeValuesService = new FakeValuesService(
-                new Locale("en-GB"), new RandomService());
-        Faker faker = new Faker();
-
-        createUserModel.setEmail(fakeValuesService.bothify("????###@gmail.com"));
-        createUserModel.setPassword(fakeValuesService.bothify("????###"));
-        createUserModel.setName(faker.name().firstName());
+        createUserModel = UserRandom.getUserRandom();
     }
 
     @Test
